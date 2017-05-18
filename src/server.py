@@ -34,7 +34,6 @@ def sendToFacebook(sender,recipient,messageData):
     return True
 
 
-
 def run(data):
      print(data)
      messaging_events = data['entry'][0]['messaging']
