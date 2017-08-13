@@ -1,2 +1,4 @@
 node_modules/
 src/token
+APP_SECRET.txt
+TOKEN.txt
