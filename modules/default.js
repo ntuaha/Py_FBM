@@ -11,16 +11,7 @@ const ai = (event) => {
   }
   if (event.message) {
     if (event.message.text) {
-      let text = event.message.text
-      // 對實體小i
-      if (text.slice(0, 2) === '小i') {
-        request('http://esb-robot.mybluemix.net/ai/NAO?q=' + encodeURIComponent(text.slice(2)), function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            fb.sendText(recipient, sender, body)
-          }
-        })
-        return true
-      }
+      let text = event.message.text      
       // ask esuncat
       request('http://funny.aha.taipei/esb/ai/1/message/' + encodeURIComponent(text), (error, response, body) => {
         if (!error && response.statusCode === 200) {
