@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const router = express.Router()
 const token = 'funny_aha_taipei_aha_robot_fb'
+const fb = require('./modules/fb')
 
 function validation (req, res) {
   if (req.param('hub.mode') === 'subscribe' && req.param('hub.verify_token') === token) {
@@ -27,18 +28,18 @@ router.post('/page/webhook', async (req, res, next) => {
 const default_module = require(path.join(__dirname,'./modules/default'))
 // 會不會大量訊息需要使用continue
 router.post('/webhook', async (req, res, next) => {
-  console.log("msg",JSON.stringify(req.body))
-  let changeEvents = req.body.entry[0].changes  
-  if(changeEvents){
+  console.log("msg", JSON.stringify(req.body))
+  let changeEvents = req.body.entry[0].changes
+  let pageId = req.body.entry[0].id
+  if (changeEvents) {
     for (let i = 0; i < changeEvents.length; i++) {
       let event = changeEvents[i]
+      fb.fromPageToMessenger(pageId, event.value.sender_id, "你是不是想: " + event.value.message)
       console.log("event", JSON.stringify(event))
     }
     res.sendStatus(200)
     return
   }
-  
-
 
   let messagingEvents = req.body.entry[0].messaging
   for (let i = 0; i < messagingEvents.length; i++) {
