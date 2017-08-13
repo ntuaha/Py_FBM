@@ -18,6 +18,7 @@
   "homepage": "https://github.com/ntuaha/Py_FBM#readme",
   "dependencies": {
     "body-parser": "^1.17.1",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.15.2",
     "express-x-hub": "^1.0.4",
     "method-override": "^2.3.8",

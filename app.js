@@ -20,7 +20,6 @@ const APP_SECRET = fs.readFileSync(path.join(__dirname, 'APP_SECRET.txt'))
 app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET || APP_SECRET }))
 
 app.use('/', require(path.join(__dirname, 'fb')))
-app.use('/page', require(path.join(__dirname, 'fb')))
 
 const options = {
   'key': fs.readFileSync(path.join('/home/aha/nodejs/', '/ssl/letsencrypt/funny.aha.taipei/privkey.pem')),
