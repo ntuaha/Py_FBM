@@ -28,6 +28,7 @@ router.post('/page/webhook', async (req, res, next) => {
 const default_module = require(path.join(__dirname,'./modules/default'))
 // 會不會大量訊息需要使用continue
 router.post('/webhook', async (req, res, next) => {
+  console.log(req.body)
   console.log("msg", JSON.stringify(req.body))
   let changeEvents = req.body.entry[0].changes
   let pageId = req.body.entry[0].id

@@ -11,15 +11,18 @@ const clientSecret = fs.readFileSync(path.join(__dirname, '../APP_SECRET.txt'), 
 const appsecretProof = CryptoJS.HmacSHA256(pageAccessToken, clientSecret).toString(CryptoJS.enc.Hex)
 
 function fromPageToMessenger (pageId, pageUserID, msg) {
+  const senderPage = process.env.AHASROBOT_PAGE_ID
+  const token = process.env.AHASROBOT_APP_TOKEN
+  console.log('token',token)
   let option = {
     url: FB_API_URL + pageUserID,
     qs: {
-      access_token: pageAccessToken,
-      appsecret_proof: appsecretProof,
+      access_token: token,
       fields: 'name,age_range,ids_for_apps,ids_for_pages'
     },
     method: 'GET'
   }
+  console.log(JSON.stringify(option))
   // 去Facebook 查對應的ID
   return new Promise((resolve, reject) => {
     request(option, (error, response, body) => {
@@ -27,17 +30,18 @@ function fromPageToMessenger (pageId, pageUserID, msg) {
         return console.err(error)
       }
       let data = JSON.parse(body)
+      console.log(body)
       //  透過pageID 去找到顧客對應 page底下的ID     
       let fbmId = ''
       for (let i in data['ids_for_pages']['data']) {
-        if (data['ids_for_pages']['data'][i]['page'].id === pageId) {
+        if (data['ids_for_pages']['data'][i]['page'].id === senderPage) {
           fbmId = data['ids_for_pages']['data'][i].id
           break
         }
       }
       console.log('fbmId', fbmId)
       console.log('pageId', pageId)
-      sendText(pageId, fbmId, msg)
+      sendText(senderPage, fbmId, msg)
       resolve()
     })
   })
@@ -54,7 +58,7 @@ function sendToFacebook (sender, recipient, messageData) {
   return new Promise((resolve, reject) => {
     request({
       url: FBM_API_URL,
-      qs: {access_token: pageAccessToken},
+      qs: {access_token: process.env.AHASROBOT_PAGE_TOKEN},
       method: 'POST',
       json: {
         recipient: {id: recipient},
